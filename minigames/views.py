@@ -26,12 +26,33 @@ class PlayerGameSessionViewSet(viewsets.ModelViewSet):
         user = self.request.user
         instance = serializer.save(user=user)
 
-        if instance.game == "Comparación de sumas":
+        if instance.game == "Comparacion de sumas":
+            # Reglas para Comparacion de sumas
             if instance.score == 400:
                 user.score += 400  # Ganó
+            #elif instance.score == 200:
+                #user.score += 100  # Buen intento
             else:
                 user.score = max(user.score - 400, 0)  # Perdió, no negativo
+
+        elif instance.game == "OTRO JUEGO":
+            # Reglas para OTRO JUEGO
+            if instance.score == 300:
+                user.score += 300  # Ganó muy bien
+            elif instance.score == 150:
+                user.score += 75   # Ganó parcialmente
+            else:
+                user.score = max(user.score - 200, 0)  # Perdió, no negativo
+
+        elif instance.game == "PPT":
+            # Reglas para Piedra Papel Tijera
+            if instance.score > 0:
+                user.score += instance.score  # Ganó suma puntos
+            else:
+                user.score = max(user.score + instance.score - 400, 0)  # Penalización, no negativo
+
         else:
+            # Otros juegos, sumar directo
             user.score += instance.score
 
         user.save()
@@ -91,7 +112,26 @@ class LogoutView(APIView):
             return Response({"error": "Token no encontrado"}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({"success": "Sesión cerrada correctamente"}, status=status.HTTP_200_OK)
-    
+  
     
 def custom_404_view(request, exception):
     return render(request, '404.html', status=404)
+
+
+
+"""
+def perform_create(self, serializer):
+    user = self.request.user
+    instance = serializer.save(user=user)
+
+    if instance.game == "Comparacion de sumas":
+        # lógica para Comparacion de sumas
+        pass
+    elif instance.game in ("PPT", "SUMA"):
+        # lógica para PPT o SUMA juntos
+        pass
+    else:
+        user.score += instance.score
+
+    user.save()
+"""
