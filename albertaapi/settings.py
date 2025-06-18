@@ -27,7 +27,10 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken', 
-    'minigames'
+    'minigames',
+    'stories',
+    'cluedo'
+     
 ]
 
 REST_FRAMEWORK = {
@@ -75,11 +78,10 @@ WSGI_APPLICATION = 'albertaapi.wsgi.application'
 CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5500",      # Si sirves el frontend con Live Server (VSCode)
-    "http://127.0.0.1:5500",      # Otra posible variante
+    #"http://localhost:5500",      # Si sirves el frontend con Live Server (VSCode)
     "http://localhost:3000",      # Si usas React/Vite
-    "http://127.0.0.1:8080",      # Live Server por npx
-    "http://localhost:8080",      # También Live Server por npx
+    #"http://127.0.0.1:8080",      # Live Server por npx
+    #"http://localhost:8080",      # También Live Server por npx
 ]
 
 
