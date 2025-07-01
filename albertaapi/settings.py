@@ -9,15 +9,14 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY')
+OPENAI = os.getenv('OPENAI')
 #DEBUG = True
-
-ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['*']
-
 DEBUG = False
 #ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
-#CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS')
 
+ALLOWED_HOSTS = ['*']
+#CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS')
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -34,7 +33,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken', 
     'minigames',
     'stories',
-    'cluedo'
+    'cluedo',
+    'tarotapi'
      
 ]
 
@@ -131,11 +131,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 
