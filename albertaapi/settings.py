@@ -13,10 +13,9 @@ OPENAI = os.getenv('OPENAI')
 #DEBUG = True
 DEBUG = False
 #ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
-
 ALLOWED_HOSTS = ['*']
 #CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS')
-ALLOWED_HOSTS = []
+
 
 
 # Application definition
