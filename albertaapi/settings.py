@@ -10,8 +10,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 OPENAI = os.getenv('OPENAI')
-#DEBUG = True
-DEBUG = False
+DEBUG = True
+#DEBUG = False
 #ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 ALLOWED_HOSTS = ['*']
 #CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS')
@@ -33,7 +33,9 @@ INSTALLED_APPS = [
     'minigames',
     'stories',
     'cluedo',
-    'tarotapi'
+    'tarotapi',
+    'invoices',
+    'cvonline'
      
 ]
 
@@ -88,6 +90,8 @@ CORS_ALLOWED_ORIGINS = [
     #"http://localhost:8080",      # También Live Server por npx
 ]
 
+# Muy importante: Exponer los headers que quieres leer
+CORS_EXPOSE_HEADERS = ['Content-Disposition']
 
 
 DATABASES = {
@@ -126,8 +130,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
@@ -135,12 +137,16 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
 STATIC_URL = 'static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+#Send Mails
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_USER')
+EMAIL_HOST_PASSWORD =  os.getenv('EMAIL_PWD')

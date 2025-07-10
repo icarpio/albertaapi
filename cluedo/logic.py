@@ -7,16 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 openai.api_key = os.getenv("OPENAI")
 
-NPCS = {
-    "npc1": "Eres un mayordomo educado pero reservado.",
-    "npc2": "Eres una jardinera que oculta cosas.",
-    "npc3": "Eres un vecino curioso.",
-    "npc4": "Eres un detective retirado, sabio pero escéptico.",
-    "npc5": "Eres un periodista ambicioso.",
-    "npc6": "Eres un chef excéntrico y observador.",
-    "npc7": "Eres una anciana sabia, algo olvidadiza.",
-    "npc8": "Eres un niño prodigio muy observador."
-}
+
 CASES = [
     {
         "id": 1,
@@ -170,6 +161,17 @@ CASES = [
     }
 ]
 
+NPCS = {
+    "npc1": "Eres un mayordomo educado pero reservado.",
+    "npc2": "Eres una jardinera que oculta cosas.",
+    "npc3": "Eres un vecino curioso.",
+    "npc4": "Eres un detective retirado, sabio pero escéptico.",
+    "npc5": "Eres una periodista ambiciosa.",
+    "npc6": "Eres un chef excéntrico y observador.",
+    "npc7": "Eres una anciana sabia, algo olvidadiza.",
+    "npc8": "Eres un niño prodigio muy observador."
+}
+
 def get_or_create_gamestate():
     gs, created = GameState.objects.get_or_create(id=1)
     if created or not gs.assassin or not gs.case_id:
@@ -201,7 +203,7 @@ def get_npc_prompt(npc_id):
         base_prompt += " Eres el asesino del crimen. Mientes para esconder tu culpabilidad y tratas de despistar al jugador."
     else:
         base_prompt += " Sabes que eres inocente y das respuestas honestas para ayudar a resolver el caso."
-
+    base_prompt += " Responde sólo con la respuesta del personaje, sin poner su nombre ni etiquetas."
     return case_context + base_prompt
 
 def get_npc_response(npc_id, history):
@@ -210,17 +212,18 @@ def get_npc_response(npc_id, history):
     messages = [{"role": "system", "content": prompt}]
     messages.append({"role": "user", "content": history})
 
-    completion = openai.ChatCompletion.create(
-        model="gpt-4o",
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
         messages=messages,
         temperature=0.7
     )
 
-    return completion.choices[0].message.content
+    return response.choices[0].message.content
+
 
 def check_accusation(npc_id):
     gs = get_or_create_gamestate()
     if npc_id == gs.assassin:
-        return True, f"¡Correcto! {npc_id} es el asesino. Has resuelto el caso."
+        return True, f"¡Correcto! {npc_id} es el culpable. Has resuelto el caso."
     else:
-        return False, f"No, {npc_id} no es el asesino. Sigue investigando."
+        return False, f"No, {npc_id} no es el culpable. Sigue investigando."

@@ -5,6 +5,7 @@ from django.views.decorators.http import require_GET, require_POST
 from .models import GameState
 import random
 from .logic import get_npc_response, check_accusation, get_current_case,CASES, NPCS
+import traceback  # 👈 Importante
 
 @require_GET
 def get_case(request):
@@ -21,15 +22,21 @@ def get_case(request):
 @csrf_exempt
 @require_POST
 def chat(request):
-    data = json.loads(request.body)
-    target = data.get("target")
-    message = data.get("message")
-    if not target or not message:
-        return JsonResponse({"error": "Faltan parámetros"}, status=400)
+    try:
+        data = json.loads(request.body)
+        target = data.get("target")
+        message = data.get("message")
+        if not target or not message:
+            return JsonResponse({"error": "Faltan parámetros"}, status=400)
 
-    reply = get_npc_response(target, message)
-    return JsonResponse({"reply": reply})
+        reply = get_npc_response(target, message)
+        return JsonResponse({"reply": reply})
 
+    except Exception as e:
+        import traceback
+        traceback.print_exc()  # Imprime el error completo en consola
+        return JsonResponse({"error": str(e)}, status=500)
+    
 @csrf_exempt
 @require_POST
 def accuse(request):
@@ -45,7 +52,6 @@ def accuse(request):
 @csrf_exempt
 @require_POST
 def restart_game_view(request):
-    
     # Borra todo y crea nuevo estado
     GameState.objects.all().delete()
     
