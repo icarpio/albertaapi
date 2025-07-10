@@ -73,7 +73,7 @@ class CreateInvoiceView(APIView):
         pdf_buffer = self.generate_pdf(invoice)
 
         response = HttpResponse(pdf_buffer, content_type='application/pdf')
-        response['Content-Disposition'] = f'attachment; filename="factura_C{invoice.invoice_number:03d}_{invoice.receipt_date.strftime("%y")}.pdf"'
+        response['Content-Disposition'] = f'attachment; filename="C{invoice.invoice_number:03d}_{invoice.receipt_date.strftime("%y")}.pdf"'
         print(response['Content-Disposition'])
         return response
 
