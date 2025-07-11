@@ -35,7 +35,7 @@ def contact_api(request):
         msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
         msg.attach_alternative(html_content, "text/html")
 
-        image_url = "https://res.cloudinary.com/dsqk3zdtz/image/upload/v1737285162/profiles_sbfxzn.jpg"
+        image_url = "https://upload.wikimedia.org/wikipedia/commons/b/b4/London_Eye_Twilight_April_2006.jpg"
         response = requests.get(image_url)
         image = MIMEImage(response.content)
         image.add_header('Content-ID', '<image1>')
