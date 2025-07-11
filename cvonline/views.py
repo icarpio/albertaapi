@@ -10,6 +10,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.core.mail import get_connection
 from email.mime.image import MIMEImage
 import requests
+from django.http import JsonResponse
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -22,10 +23,7 @@ def contact_api(request):
         from_email = data['email']
         to_email = [os.getenv('EMAIL_USER')]
 
-        # Mensaje plano
         text_content = f"Message from {data['first_name']} {data['last_name']} ({data['email']}):\n\n{data['message']}"
-
-        # Mensaje HTML con imagen embebida
         html_content = f"""
         <div style="text-align: center;">
         <img src="cid:image1" alt="Image email" style="display: inline-block;">
@@ -34,11 +32,9 @@ def contact_api(request):
         <p>{data['message'].replace('\n', '<br>')}</p>
         """
 
-        # Crear mensaje
         msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
         msg.attach_alternative(html_content, "text/html")
 
-        # Descargar la imagen y agregarla como MIMEImage
         image_url = "https://res.cloudinary.com/dsqk3zdtz/image/upload/v1737285162/profiles_sbfxzn.jpg"
         response = requests.get(image_url)
         image = MIMEImage(response.content)
@@ -47,6 +43,6 @@ def contact_api(request):
 
         msg.send()
 
-        return Response({'success': True}, status=status.HTTP_200_OK)
+        return JsonResponse({'success': True}, status=200)
 
-    return Response({'success': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    return JsonResponse({'success': False, 'errors': serializer.errors}, status=400)
