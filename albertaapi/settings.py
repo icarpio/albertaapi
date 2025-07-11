@@ -8,23 +8,24 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Clave secreta para Django
 SECRET_KEY = os.getenv('SECRET_KEY')
-OPENAI = os.getenv('OPENAI')
-#DEBUG = True
-DEBUG = False
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
-CORS_ALLOWED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS').split(',')
 
-CORS_ALLOW_ALL_ORIGINS = True
-"""
-CORS_ALLOWED_ORIGINS = [
-    #"http://localhost:5500",      # Si sirves el frontend con Live Server (VSCode)
-    "http://localhost:3000",      # Si usas React/Vite
-    #"http://127.0.0.1:8080",      # Live Server por npx
-    #"http://localhost:8080",      # También Live Server por npx
-]
-"""
-#ALLOWED_HOSTS = ['*']
+# Modo producción (¡no activar DEBUG!)
+DEBUG = False
+
+# Hosts permitidos
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1').split(',')
+
+# CORS: orígenes permitidos
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
+
+# Alternativa (más segura que permitir todos los orígenes)
+# CORS_ALLOW_ALL_ORIGINS = False  # Recomendado
+# CORS_ALLOW_ALL_ORIGINS = True  # Solo para pruebas locales rápidas
+
+# OPENAI key (si aplica)
+OPENAI = os.getenv('OPENAI')
 
 
 
