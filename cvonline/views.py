@@ -6,9 +6,11 @@ from django.core.mail import EmailMultiAlternatives
 from email.mime.image import MIMEImage
 import os, requests
 from .serializers import ContactSerializer
+from django.views.decorators.csrf import csrf_exempt
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
+@csrf_exempt
 def contact_api(request):
     print("📨 POST recibido")
     print("🧾 Content-Type recibido:", request.content_type)

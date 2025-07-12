@@ -29,6 +29,7 @@ CORS_ALLOW_ALL_ORIGINS = True  # Solo para pruebas locales rápidas
 
 CORS_ALLOWED_ORIGINS = [
     "https://icarpiocvonline.onrender.com", 
+    "https://albertaapi.onrender.com"
     "http://localhost:3000"
 ]
 
