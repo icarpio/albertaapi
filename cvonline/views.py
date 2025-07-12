@@ -51,13 +51,13 @@ def contact_api(request):
         msg.attach_alternative(html_content, "text/html")
 
         # ✅ Cargar imagen local al mismo nivel que views.py
-        image_path = os.path.join(os.path.dirname(__file__), 'london.jpg')
+        image_path = os.path.join(os.path.dirname(__file__), 'logo.png')
         print("📂 Cargando imagen desde:", image_path)
 
         with open(image_path, 'rb') as f:
             image_data = f.read()
 
-        image = MIMEImage(image_data, _subtype='jpeg')
+        image = MIMEImage(image_data, _subtype='png')
         image.add_header('Content-ID', '<image1>')
         msg.attach(image)
 
