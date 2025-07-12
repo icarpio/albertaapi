@@ -43,7 +43,17 @@ def contact_api(request):
 
         image_url = "https://upload.wikimedia.org/wikipedia/commons/b/b4/London_Eye_Twilight_April_2006.jpg"
         response = requests.get(image_url)
-        image = MIMEImage(response.content)
+        image_data = response.content
+        content_type = response.headers.get('Content-Type', '')
+
+        subtype = None
+        if content_type.startswith('image/'):
+            subtype = content_type.split('/')[1]
+
+        if not subtype:
+            subtype = 'jpeg'  # fallback
+
+        image = MIMEImage(image_data, _subtype=subtype)
         image.add_header('Content-ID', '<image1>')
         msg.attach(image)
         msg.send()
