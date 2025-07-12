@@ -16,14 +16,14 @@ DEBUG = False
 
 # Hosts permitidos
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1').split(',')
-
+#ALLOWED_HOSTS = ['*']
 # CORS: orígenes permitidos
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
 
 # Alternativa (más segura que permitir todos los orígenes)
 # CORS_ALLOW_ALL_ORIGINS = False  # Recomendado
-# CORS_ALLOW_ALL_ORIGINS = True  # Solo para pruebas locales rápidas
-
+#CORS_ALLOW_ALL_ORIGINS = True  # Solo para pruebas locales rápidas
+#ORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 # OPENAI key (si aplica)
 OPENAI = os.getenv('OPENAI')
 
