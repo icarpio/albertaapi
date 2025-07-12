@@ -25,8 +25,9 @@ def contact_api(request):
 
     try:
         subject = data['subject']
-        from_email = data['email']
+        from_email = os.getenv('EMAIL_USER', 'fallback@example.com')  # Tu email autorizado SMTP
         to_email = [os.getenv('EMAIL_USER', 'fallback@example.com')]
+        reply_to = [data['email']]  # Email del usuario que envía el formulario
 
         text_content = f"Mensaje de {data['first_name']} {data['last_name']} ({data['email']}):\n\n{data['message']}"
         html_content = f"""
@@ -37,7 +38,7 @@ def contact_api(request):
         <p>{data['message'].replace('\n', '<br>')}</p>
         """
 
-        msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+        msg = EmailMultiAlternatives(subject, text_content, from_email, to_email, reply_to=reply_to)
         msg.attach_alternative(html_content, "text/html")
 
         image_url = "https://upload.wikimedia.org/wikipedia/commons/b/b4/London_Eye_Twilight_April_2006.jpg"
@@ -52,3 +53,4 @@ def contact_api(request):
     except Exception as e:
         print("❌ Error enviando el correo:", str(e))
         return Response({'success': False, 'errors': {'email': ['Error enviando email']}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
