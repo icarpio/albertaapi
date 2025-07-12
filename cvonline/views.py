@@ -24,43 +24,43 @@ def contact_api(request):
     data = serializer.validated_data
 
     try:
-        subject = data['subject']
-        from_email = os.getenv('EMAIL_USER', 'fallback@example.com')  # Tu email autorizado SMTP
-        to_email = [os.getenv('EMAIL_USER', 'fallback@example.com')]
-        reply_to = [data['email']]  # Email del usuario que envía el formulario
+        subject = data.get('subject', 'Sin asunto')
+        from_email = os.getenv('EMAIL_USER', 'fallback@example.com')
+        to_email = [from_email]
+        reply_to = [data.get('email', '')]
 
-        text_content = f"Mensaje de {data['first_name']} {data['last_name']} ({data['email']}):\n\n{data['message']}"
+        text_content = f"Mensaje de {data.get('first_name', '')} {data.get('last_name', '')} ({data.get('email', '')}):\n\n{data.get('message', '')}"
+        
         html_content = f"""
         <div style="text-align: center;">
             <img src="cid:image1" alt="Imagen" style="display: inline-block;">
         </div>
-        <p>Mensaje de <strong>{data['first_name']} {data['last_name']}</strong> ({data['email']}):</p>
-        <p>{data['message'].replace('\n', '<br>')}</p>
+        <p>Mensaje de <strong>{data.get('first_name', '')} {data.get('last_name', '')}</strong> ({data.get('email', '')}):</p>
+        <p>{data.get('message', '').replace('\n', '<br>')}</p>
         """
 
         msg = EmailMultiAlternatives(subject, text_content, from_email, to_email, reply_to=reply_to)
         msg.attach_alternative(html_content, "text/html")
 
-        # Imagen embebida en el correo
+        # Descargar y adjuntar la imagen embebida
         image_url = "https://upload.wikimedia.org/wikipedia/commons/b/b4/London_Eye_Twilight_April_2006.jpg"
         response = requests.get(image_url)
 
         if response.status_code == 200:
             image_data = response.content
             content_type = response.headers.get('Content-Type', '')
-            subtype = 'jpeg'  # Valor por defecto
+            subtype = 'jpeg'  # por defecto
 
             if content_type.startswith('image/'):
                 subtype = content_type.split('/')[1]
 
             image = MIMEImage(image_data, _subtype=subtype)
             image.add_header('Content-ID', '<image1>')
-            image.add_header('Content-Disposition', 'inline', filename='image1')
             msg.attach(image)
         else:
             print("⚠️ No se pudo obtener la imagen:", image_url)
-        msg.send()
 
+        msg.send()
         return Response({'success': True}, status=status.HTTP_200_OK)
 
     except Exception as e:
