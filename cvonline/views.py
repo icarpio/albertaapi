@@ -8,13 +8,6 @@ import os, requests
 from .serializers import ContactSerializer
 from django.views.decorators.csrf import csrf_exempt
 
-import os
-from django.core.mail import EmailMultiAlternatives
-from email.mime.image import MIMEImage
-from rest_framework.decorators import api_view, permission_classes, csrf_exempt
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
-from rest_framework import status
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
