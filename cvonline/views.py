@@ -4,7 +4,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework import status
 from django.core.mail import EmailMultiAlternatives
 from email.mime.image import MIMEImage
-import os, requests
+import os
 from .serializers import ContactSerializer
 from django.views.decorators.csrf import csrf_exempt
 
@@ -34,7 +34,7 @@ def contact_api(request):
         
         html_content = f"""
         <div style="text-align: center;">
-            <img src="cid:image1" alt="Imagen" style="display: inline-block;">
+            <img src="cid:image1" alt="Imagen" style="display: inline-block; width: 32px; height: 32px;">
         </div>
         <p>Mensaje de <strong>{data.get('first_name', '')} {data.get('last_name', '')}</strong> ({data.get('email', '')}):</p>
         <p>{data.get('message', '').replace('\n', '<br>')}</p>
