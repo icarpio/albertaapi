@@ -41,21 +41,24 @@ def contact_api(request):
         msg = EmailMultiAlternatives(subject, text_content, from_email, to_email, reply_to=reply_to)
         msg.attach_alternative(html_content, "text/html")
 
+        # Imagen embebida en el correo
         image_url = "https://upload.wikimedia.org/wikipedia/commons/b/b4/London_Eye_Twilight_April_2006.jpg"
         response = requests.get(image_url)
-        image_data = response.content
-        content_type = response.headers.get('Content-Type', '')
 
-        subtype = None
-        if content_type.startswith('image/'):
-            subtype = content_type.split('/')[1]
+        if response.status_code == 200:
+            image_data = response.content
+            content_type = response.headers.get('Content-Type', '')
+            subtype = 'jpeg'  # Valor por defecto
 
-        if not subtype:
-            subtype = 'jpeg'  # fallback
+            if content_type.startswith('image/'):
+                subtype = content_type.split('/')[1]
 
-        image = MIMEImage(image_data, _subtype=subtype)
-        image.add_header('Content-ID', '<image1>')
-        msg.attach(image)
+            image = MIMEImage(image_data, _subtype=subtype)
+            image.add_header('Content-ID', '<image1>')
+            image.add_header('Content-Disposition', 'inline', filename='image1')
+            msg.attach(image)
+        else:
+            print("⚠️ No se pudo obtener la imagen:", image_url)
         msg.send()
 
         return Response({'success': True}, status=status.HTTP_200_OK)
