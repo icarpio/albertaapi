@@ -8,6 +8,14 @@ import os, requests
 from .serializers import ContactSerializer
 from django.views.decorators.csrf import csrf_exempt
 
+import os
+from django.core.mail import EmailMultiAlternatives
+from email.mime.image import MIMEImage
+from rest_framework.decorators import api_view, permission_classes, csrf_exempt
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework import status
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 @csrf_exempt
@@ -42,25 +50,19 @@ def contact_api(request):
         msg = EmailMultiAlternatives(subject, text_content, from_email, to_email, reply_to=reply_to)
         msg.attach_alternative(html_content, "text/html")
 
-        # Descargar y adjuntar la imagen embebida
-        image_url = "https://upload.wikimedia.org/wikipedia/commons/b/b4/London_Eye_Twilight_April_2006.jpg"
-        response = requests.get(image_url)
+        # ✅ Cargar imagen local al mismo nivel que views.py
+        image_path = os.path.join(os.path.dirname(__file__), 'london.jpg')
+        print("📂 Cargando imagen desde:", image_path)
 
-        if response.status_code == 200:
-            image_data = response.content
-            content_type = response.headers.get('Content-Type', '')
-            subtype = 'jpeg'  # por defecto
+        with open(image_path, 'rb') as f:
+            image_data = f.read()
 
-            if content_type.startswith('image/'):
-                subtype = content_type.split('/')[1]
-
-            image = MIMEImage(image_data, _subtype=subtype)
-            image.add_header('Content-ID', '<image1>')
-            msg.attach(image)
-        else:
-            print("⚠️ No se pudo obtener la imagen:", image_url)
+        image = MIMEImage(image_data, _subtype='jpeg')
+        image.add_header('Content-ID', '<image1>')
+        msg.attach(image)
 
         msg.send()
+        print("✅ Correo enviado con imagen embebida")
         return Response({'success': True}, status=status.HTTP_200_OK)
 
     except Exception as e:
