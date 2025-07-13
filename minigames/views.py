@@ -9,10 +9,13 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 class MiniGameUserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = MiniGameUserSerializer
+
 
 class PlayerGameSessionViewSet(viewsets.ModelViewSet):
     serializer_class = PlayerGameSessionSerializer
@@ -57,6 +60,8 @@ class PlayerGameSessionViewSet(viewsets.ModelViewSet):
 
         user.save()
 
+
+@method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(APIView):
     permission_classes = [AllowAny]  # Permite acceso sin autenticación
 
@@ -81,6 +86,8 @@ class RegisterView(APIView):
                 {"detail": "Error interno al crear usuario."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+            
+@method_decorator(csrf_exempt, name='dispatch')      
 class LoginView(APIView):
     permission_classes = [AllowAny]  # Para evitar 401
 
@@ -100,7 +107,8 @@ class LoginView(APIView):
             "score": user.score,
             "coins": user.coins,
         })
-        
+
+@method_decorator(csrf_exempt, name='dispatch')        
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
