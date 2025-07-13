@@ -14,7 +14,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # Modo producción (¡no activar DEBUG!)
 DEBUG = False
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1').split(',')
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
+#CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
 CORS_ALLOW_CREDENTIALS = True
 OPENAI = os.getenv('OPENAI')
 
@@ -25,14 +25,14 @@ OPENAI = os.getenv('OPENAI')
 # CORS_ALLOW_ALL_ORIGINS = True  # Solo para pruebas locales rápidas
 # CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 
-""" 
+
 CORS_ALLOWED_ORIGINS = [
     "https://icarpiocvonline.onrender.com",
     "https://lanoria.onrender.com",
     "https://albertaapi.onrender.com",
     "http://localhost:3000"
 ]
-"""
+
 
 
 
