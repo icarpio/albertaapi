@@ -3,6 +3,7 @@ from django.urls import path, include
 from rest_framework.authtoken.views import obtain_auth_token
 from invoices.views import CreateInvoiceView
 from cvonline.views import contact_api
+from minigames.views import convert_score_to_coins
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -13,6 +14,7 @@ urlpatterns = [
     path('tarotapi/', include('tarotapi.urls')),
     path('api/create-invoice/', CreateInvoiceView.as_view(), name='create-invoice'),
     path('cv/contact/', contact_api, name='contact_api'),
+    path('api/convert/', convert_score_to_coins),
 ]
 
 handler404 = 'minigames.views.custom_404_view'  

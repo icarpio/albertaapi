@@ -12,8 +12,7 @@ urlpatterns = [
     path('auth/register/', RegisterView.as_view(), name='register'),
     path('auth/login/', LoginView.as_view(), name='login'),
     path('auth/logout/', LogoutView.as_view(), name='logout'),
-    path('api/convert/', convert_score_to_coins),
-    path('api/shop/', shop_items_list),
-    path('api/buy/', buy_item),
-    path('api/inventory/', user_inventory),
+    path('shop/', shop_items_list),
+    path('buy/', buy_item),
+    path('inventory/', user_inventory),
 ]
