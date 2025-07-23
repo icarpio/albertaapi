@@ -34,3 +34,18 @@ class PlayerGameSession(models.Model):
     game = models.CharField(max_length=100)  # Se pasa como string
     score = models.IntegerField(default=0)
     played_at = models.DateTimeField(auto_now_add=True)
+    
+    
+class ShopItem(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.IntegerField()
+    image_name = models.CharField(max_length=100)  # Ej: sword.png
+
+    def __str__(self):
+        return self.name
+
+
+class Purchase(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='purchases')
+    item = models.ForeignKey(ShopItem, on_delete=models.CASCADE)
+    purchased_at = models.DateTimeField(auto_now_add=True)

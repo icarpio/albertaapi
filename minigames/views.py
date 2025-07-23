@@ -10,7 +10,11 @@ from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
 from django.utils.decorators import method_decorator
+from rest_framework.decorators import api_view,permission_classes
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from .models import ShopItem, Purchase
 
 class MiniGameUserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -120,7 +124,81 @@ class LogoutView(APIView):
             return Response({"error": "Token no encontrado"}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({"success": "Sesión cerrada correctamente"}, status=status.HTTP_200_OK)
-  
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def convert_score_to_coins(request):
+    user = request.user
+    points_to_convert = int(request.data.get('points', 0))
+
+    if points_to_convert <= 0 or points_to_convert > user.score:
+        return Response({'error': 'Puntos inválidos'}, status=400)
+
+    if points_to_convert < 100:
+        return Response({'error': 'Debes convertir al menos 100 puntos.'}, status=400)
+
+    # Tasa de conversión: 100 puntos = 1 moneda
+    coins_earned = points_to_convert // 100
+    points_spent = coins_earned * 100
+
+    user.score -= points_spent
+    user.coins += coins_earned
+    user.save()
+
+    return Response({
+        'coins_earned': coins_earned,
+        'points_spent': points_spent,
+        'remaining_score': user.score,
+        'new_balance': user.coins
+    })
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def shop_items_list(request):
+    items = ShopItem.objects.all().values('id', 'name', 'price', 'image_name')
+    return Response(list(items))
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def buy_item(request):
+    user = request.user
+    item_id = request.data.get('item_id')
+
+    try:
+        item = ShopItem.objects.get(pk=item_id)
+    except ShopItem.DoesNotExist:
+        return Response({'error': 'Ítem no encontrado'}, status=404)
+
+    if user.coins < item.price:
+        return Response({'error': 'No tienes suficientes monedas'}, status=400)
+
+    user.coins -= item.price
+    user.save()
+    Purchase.objects.create(user=user, item=item)
+
+    return Response({
+        'message': 'Ítem comprado',
+        'item': item.name,
+        'coins_left': user.coins
+    })
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_inventory(request):
+    purchases = Purchase.objects.filter(user=request.user).select_related('item')
+    data = [
+        {
+            'item_id': p.item.id,
+            'name': p.item.name,
+            'image_name': p.item.image_name,
+            'purchased_at': p.purchased_at
+        } for p in purchases
+    ]
+    return Response(data)
+
     
 def custom_404_view(request, exception):
     return render(request, '404.html', status=404)

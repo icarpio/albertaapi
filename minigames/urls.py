@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import MiniGameUserViewSet, PlayerGameSessionViewSet, RegisterView, LoginView, LogoutView
+from .views import *
 
 router = DefaultRouter()
 router.register(r'users', MiniGameUserViewSet)
@@ -12,4 +12,8 @@ urlpatterns = [
     path('auth/register/', RegisterView.as_view(), name='register'),
     path('auth/login/', LoginView.as_view(), name='login'),
     path('auth/logout/', LogoutView.as_view(), name='logout'),
+    path('api/convert/', convert_score_to_coins),
+    path('api/shop/', shop_items_list),
+    path('api/buy/', buy_item),
+    path('api/inventory/', user_inventory),
 ]
