@@ -128,7 +128,6 @@ class LogoutView(APIView):
 
         return Response({"success": "Sesión cerrada correctamente"}, status=status.HTTP_200_OK)
 
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def convert_score_to_coins(request):
@@ -136,18 +135,21 @@ def convert_score_to_coins(request):
         user = request.user
         points_to_convert = int(request.data.get('points', 0))
 
-        # Validate points
         if points_to_convert <= 0 or points_to_convert > user.score:
-            return Response({'error': 'Puntos inválidos'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Puntos inválidos'}, status=400)
 
         if points_to_convert < 100:
-            return Response({'error': 'Debes convertir al menos 100 puntos.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Debes convertir al menos 100 puntos.'}, status=400)
 
-        # Conversion logic
         coins_earned = points_to_convert // 100
         points_spent = coins_earned * 100
 
-        # Update user model
+        # Asegúrate de que score y coins no sean None
+        if user.score is None:
+            user.score = 0
+        if user.coins is None:
+            user.coins = 0
+
         user.score -= points_spent
         user.coins += coins_earned
         user.save()
@@ -160,9 +162,9 @@ def convert_score_to_coins(request):
         })
 
     except Exception as e:
-        logger.exception("Error during point conversion")
-        return Response({'error': 'Server error', 'details': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+        import traceback
+        traceback.print_exc()
+        return Response({'error': 'Internal Server Error', 'details': str(e)}, status=500)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
