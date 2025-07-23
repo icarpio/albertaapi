@@ -15,6 +15,9 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import ShopItem, Purchase
+import logging
+
+logger = logging.getLogger(__name__)
 
 class MiniGameUserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -125,32 +128,40 @@ class LogoutView(APIView):
 
         return Response({"success": "Sesión cerrada correctamente"}, status=status.HTTP_200_OK)
 
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def convert_score_to_coins(request):
-    user = request.user
-    points_to_convert = int(request.data.get('points', 0))
+    try:
+        user = request.user
+        points_to_convert = int(request.data.get('points', 0))
 
-    if points_to_convert <= 0 or points_to_convert > user.score:
-        return Response({'error': 'Puntos inválidos'}, status=400)
+        # Validate points
+        if points_to_convert <= 0 or points_to_convert > user.score:
+            return Response({'error': 'Puntos inválidos'}, status=status.HTTP_400_BAD_REQUEST)
 
-    if points_to_convert < 100:
-        return Response({'error': 'Debes convertir al menos 100 puntos.'}, status=400)
+        if points_to_convert < 100:
+            return Response({'error': 'Debes convertir al menos 100 puntos.'}, status=status.HTTP_400_BAD_REQUEST)
 
-    # Tasa de conversión: 100 puntos = 1 moneda
-    coins_earned = points_to_convert // 100
-    points_spent = coins_earned * 100
+        # Conversion logic
+        coins_earned = points_to_convert // 100
+        points_spent = coins_earned * 100
 
-    user.score -= points_spent
-    user.coins += coins_earned
-    user.save()
+        # Update user model
+        user.score -= points_spent
+        user.coins += coins_earned
+        user.save()
 
-    return Response({
-        'coins_earned': coins_earned,
-        'points_spent': points_spent,
-        'remaining_score': user.score,
-        'new_balance': user.coins
-    })
+        return Response({
+            'coins_earned': coins_earned,
+            'points_spent': points_spent,
+            'remaining_score': user.score,
+            'new_balance': user.coins
+        })
+
+    except Exception as e:
+        logger.exception("Error during point conversion")
+        return Response({'error': 'Server error', 'details': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['GET'])
