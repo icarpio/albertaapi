@@ -23,6 +23,7 @@ OPENAI = os.getenv('OPENAI')
 # CORS_ALLOW_ALL_ORIGINS = False  # Recomendado
 # CORS_ALLOW_ALL_ORIGINS = True  # Solo para pruebas locales rápidas
 # CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+
 """
 CORS_ALLOWED_ORIGINS = [
     "https://icarpiocvonline.onrender.com",
@@ -31,7 +32,6 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000"
 ]
 """
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -70,6 +70,7 @@ REST_FRAMEWORK = {
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -145,7 +146,15 @@ USE_I18N = True
 USE_TZ = True
 
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'  # Siempre debe empezar y terminar con / para producción
+
+if DEBUG:
+    # En desarrollo
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+else:
+    # En producción
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
