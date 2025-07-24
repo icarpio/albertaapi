@@ -136,7 +136,7 @@ def convert_score_to_coins(request):
         points_to_convert = int(request.data.get('points', 0))
 
         if points_to_convert <= 0 or points_to_convert > user.score:
-            return Response({'error': 'Puntos inválidos'}, status=400)
+            return Response({'error': 'No tienes puntos suficientes'}, status=400)
 
         if points_to_convert < 100:
             return Response({'error': 'Debes convertir al menos 100 puntos.'}, status=400)
@@ -169,8 +169,15 @@ def convert_score_to_coins(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def shop_items_list(request):
-    items = ShopItem.objects.all().values('id', 'name', 'price', 'image_name')
-    return Response(list(items))
+    try:
+        print("User:", request.user)
+        print("Is authenticated:", request.user.is_authenticated)
+
+        items = ShopItem.objects.all().values('id', 'name', 'price', 'image_name')
+        return Response(list(items))
+    except Exception as e:
+        print("Error en shop_items_list:", str(e))
+        return Response({'error': 'Error interno del servidor'}, status=500)
 
 
 @api_view(['POST'])
