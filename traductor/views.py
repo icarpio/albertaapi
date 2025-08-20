@@ -96,3 +96,17 @@ def listar_traducciones(request):
         return Response({"traducciones": lista})
     except Exception as e:
         return Response({"error": str(e)}, status=500)
+    
+    
+    
+@api_view(['DELETE'])
+@permission_classes([AllowAny])
+def delete(request, id):
+    try:
+        traduccion = Traduccion.objects.get(pk=id)
+        traduccion.delete()
+        return Response({"mensaje": "Traducción eliminada correctamente"})
+    except Traduccion.DoesNotExist:
+        return Response({"error": "Traducción no encontrada"}, status=404)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
