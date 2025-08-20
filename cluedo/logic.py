@@ -3,7 +3,7 @@ import os
 import random
 from .models import GameState
 from dotenv import load_dotenv
-
+import os
 load_dotenv()
 openai.api_key = os.getenv("OPENAI")
 

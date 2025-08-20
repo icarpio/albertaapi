@@ -6,10 +6,13 @@ import json
 from .cards import draw_cards
 from .prompts import build_prompt
 import openai
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view, permission_classes
 
 client = openai.OpenAI(api_key=settings.OPENAI)
 
 @csrf_exempt
+@permission_classes([AllowAny])  # Permite acceso público solo a esta vista
 def draw_tarot(request):
     if request.method == "POST":
         data = json.loads(request.body)

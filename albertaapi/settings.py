@@ -30,8 +30,10 @@ CORS_ALLOWED_ORIGINS = [
     "https://lanoria.onrender.com",
     "https://albertaapi.onrender.com",
     "http://localhost:3000"
-]
+]   
 """
+
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -48,7 +50,9 @@ INSTALLED_APPS = [
     'cluedo',
     'tarotapi',
     'invoices',
-    'cvonline'
+    'cvonline',
+    'django_extensions',
+    'traductor',
      
 ]
 
