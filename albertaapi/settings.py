@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'tarotapi',
     'invoices',
     'cvonline',
-    'django_extensions',
     'traductor',
      
 ]
