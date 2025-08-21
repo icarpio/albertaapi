@@ -82,7 +82,7 @@ def saveTrans(request):
 
 
 class TraduccionesPagination(PageNumberPagination):
-    page_size = 20                        # ← 20 por página
+    page_size = 10                        # ← 20 por página
     page_size_query_param = 'page_size'   # permite cambiarlo con ?page_size=xx
     max_page_size = 100                   # máximo permitido
 
