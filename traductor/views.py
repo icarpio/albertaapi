@@ -2,9 +2,10 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from .models import Traduccion
-from rest_framework.pagination import PageNumberPagination
 import openai
 import os
+from rest_framework.pagination import PageNumberPagination
+from .models import Traduccion
 
 openai.api_key = os.getenv("OPENAI")
 
@@ -77,36 +78,40 @@ def saveTrans(request):
 
     except Exception as e:
         return Response({"error": str(e)}, status=500)
-    
-    
+
+
+
+class TraduccionesPagination(PageNumberPagination):
+    page_size = 20                        # ← 20 por página
+    page_size_query_param = 'page_size'   # permite cambiarlo con ?page_size=xx
+    max_page_size = 100                   # máximo permitido
+
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def listar_traducciones(request):
     try:
-        traducciones = Traduccion.objects.all().order_by('id')
+        traducciones = Traduccion.objects.all().order_by("-fecha_creacion")
 
-        # Configurar paginador
-        paginator = PageNumberPagination()
-        paginator.page_size = 20
-        resultado_paginado = paginator.paginate_queryset(traducciones, request)
+        paginator = TraduccionesPagination()
+        page = paginator.paginate_queryset(traducciones, request)
 
-        lista = []
-        for t in resultado_paginado:
-            lista.append({
+        lista = [
+            {
                 "id": t.id,
                 "texto_original": t.texto_original,
                 "español": t.español,
                 "ingles": t.ingles,
                 "italiano": t.italiano,
                 "fecha_creacion": t.fecha_creacion.strftime("%Y-%m-%d %H:%M:%S") if t.fecha_creacion else None
-            })
+            }
+            for t in page
+        ]
 
-        # Devolver respuesta paginada
         return paginator.get_paginated_response(lista)
 
     except Exception as e:
         return Response({"error": str(e)}, status=500)
-    
     
 @api_view(['DELETE'])
 @permission_classes([AllowAny])
