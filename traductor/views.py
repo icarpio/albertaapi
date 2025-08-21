@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from .models import Traduccion
+from rest_framework.pagination import PageNumberPagination
 import openai
 import os
 
@@ -82,9 +83,15 @@ def saveTrans(request):
 @permission_classes([AllowAny])
 def listar_traducciones(request):
     try:
-        traducciones = Traduccion.objects.all()
+        traducciones = Traduccion.objects.all().order_by('id')
+
+        # Configurar paginador
+        paginator = PageNumberPagination()
+        paginator.page_size = 20
+        resultado_paginado = paginator.paginate_queryset(traducciones, request)
+
         lista = []
-        for t in traducciones:
+        for t in resultado_paginado:
             lista.append({
                 "id": t.id,
                 "texto_original": t.texto_original,
@@ -93,10 +100,12 @@ def listar_traducciones(request):
                 "italiano": t.italiano,
                 "fecha_creacion": t.fecha_creacion.strftime("%Y-%m-%d %H:%M:%S") if t.fecha_creacion else None
             })
-        return Response({"traducciones": lista})
+
+        # Devolver respuesta paginada
+        return paginator.get_paginated_response(lista)
+
     except Exception as e:
         return Response({"error": str(e)}, status=500)
-    
     
     
 @api_view(['DELETE'])
