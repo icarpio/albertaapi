@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'invoices',
     'cvonline',
     'traductor',
+    'interpreter'
      
 ]
 
