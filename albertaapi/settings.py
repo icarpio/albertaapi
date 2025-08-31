@@ -11,28 +11,27 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Clave secreta para Django
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = True
+DEBUG = False
 #ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1').split(',')
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
 OPENAI = os.getenv('OPENAI')
 
 #CORS_ALLOW_CREDENTIALS = True
-ALLOWED_HOSTS = ['*']
+#ALLOWED_HOSTS = ['*']
 # CORS: orígenes permitidos
 # Alternativa (más segura que permitir todos los orígenes)
 # CORS_ALLOW_ALL_ORIGINS = False  # Recomendado
 # CORS_ALLOW_ALL_ORIGINS = True  # Solo para pruebas locales rápidas
 # CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 
-
+"""
 CORS_ALLOWED_ORIGINS = [
     "https://icarpiocvonline.onrender.com",
     "https://lanoria.onrender.com",
     "https://albertaapi.onrender.com",
     "http://localhost:3000"
 ]   
-
-
+"""
 
 
 INSTALLED_APPS = [
