@@ -4,7 +4,7 @@ import os
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from openai import OpenAI
-
+import traceback
 client = OpenAI(api_key=os.getenv("OPENAI"))
 
 # POST /api/transcribe/
@@ -88,5 +88,39 @@ def text_to_speech(request):
 
     except Exception as e:
         import traceback
+        traceback.print_exc()
+        return JsonResponse({"error": str(e)}, status=500)
+    
+    
+
+@csrf_exempt
+def text_to_speech_download(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "POST only"}, status=405)
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+        text = data.get("text", "").strip()
+        voice = data.get("voice", "alloy")
+
+        if not text:
+            return JsonResponse({"error": "Field 'text' required"}, status=400)
+
+        # Llamada a OpenAI TTS
+        response = client.audio.speech.create(
+            model="gpt-4o-mini-tts",
+            voice=voice,
+            input=text,
+            response_format="mp3"
+        )
+
+        audio_bytes = response.read()  # bytes de MP3
+
+        return HttpResponse(
+            audio_bytes,
+            content_type="audio/mpeg",
+            headers={"Content-Disposition": 'attachment; filename="tts.mp3"'}
+        )
+
+    except Exception as e:
         traceback.print_exc()
         return JsonResponse({"error": str(e)}, status=500)
