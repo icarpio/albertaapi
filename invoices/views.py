@@ -124,7 +124,7 @@ class CreateInvoiceView(APIView):
             y,
             f"Factura:   C{invoice.invoice_number:03d}/{invoice.receipt_date.strftime('%y')}"
         )
-        p.drawRightString(width - 50, y - 15, f"Fecha:{invoice.receipt_date.strftime('%d-%m-%Y')}")
+        p.drawRightString(width - 50, y - 15, f"Fecha:{invoice.booking.check_out.strftime('%d-%m-%Y')}")
 
         # --- Detalles de la reserva ---  
         y = height - 300  # Bajamos un poco para evitar superposición
@@ -143,8 +143,8 @@ class CreateInvoiceView(APIView):
 
         centered_text = (
             f"Check-in: {invoice.booking.check_in.strftime('%d-%m-%Y')}   "
-            f"Check-out: {invoice.booking.check_out.strftime('%d-%m-%Y')}   "
-            f"Unidad: {invoice.booking.unit}"
+            f"Check-out: {invoice.booking.check_out.strftime('%d-%m-%Y')}"
+            f" -  {invoice.booking.unit}"
         )
 
         p.drawCentredString(width / 2, y, centered_text)
