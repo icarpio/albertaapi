@@ -19,8 +19,8 @@ def horoscopos_hoy(request):
 compatibilidades = {
     "aries": ["leo", "sagitario", "geminis"],
     "tauro": ["virgo", "capricornio", "cancer"],
-    "geminis": ["libra", "acuario", "aries"],
-    "cancer": ["escorpio", "piscis", "tauro"],
+    "géminis": ["libra", "acuario", "aries"],
+    "cáncer": ["escorpio", "piscis", "tauro"],
     "leo": ["aries", "sagitario", "geminis"],
     "virgo": ["tauro", "capricornio", "cancer"],
     "libra": ["geminis", "acuario", "leo"],
