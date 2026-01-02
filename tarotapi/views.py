@@ -9,7 +9,12 @@ import openai
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import api_view, permission_classes
 
-client = openai.OpenAI(api_key=settings.OPENAI)
+# ❌ ELIMINADO:
+# client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
+
+# ✅ Función para crear el cliente solo cuando se use
+def get_openai_client():
+    return openai.OpenAI(api_key=settings.OPENAI_API_KEY)
 
 @csrf_exempt
 @permission_classes([AllowAny])  # Permite acceso público solo a esta vista
@@ -19,6 +24,8 @@ def draw_tarot(request):
         spread = data.get("spread", 3)
         cards = draw_cards(spread)
         prompt = build_prompt(cards, spread)
+        
+        client = get_openai_client()  # ✅ aquí se crea
 
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",  # modelo más económico y rápido

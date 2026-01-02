@@ -11,18 +11,16 @@ urlpatterns = [
     path('tarotapi/', include('tarotapi.urls')),
     path('cv/contact/', contact_api, name='contact_api'),
     path('api/minigames/', include('minigames.urls')),
-    path('api/create-invoice/', CreateInvoiceView.as_view(), name='create-invoice'),
     path('api/convert/', convert_score_to_coins),  
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
+    path('api/create-invoice/', CreateInvoiceView.as_view(), name='create-invoice'),
     path('api2/stories/', include('stories.urls')),
     path('api3/cluedo/', include('cluedo.urls')),
+    path('api4/', include('napolipizza.urls')), 
     path('api5/', include('traductor.urls')),
     path('api6/', include('stories.urls')), 
     path('api7/', include('horoscope.urls')),
 ]
 
 #handler404 = 'minigames.views.custom_404_view'  
-
-
-
 

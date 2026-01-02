@@ -2,10 +2,11 @@ import openai
 import os
 import random
 from .models import GameState
+
 from dotenv import load_dotenv
-import os
+
 load_dotenv()
-openai.api_key = os.getenv("OPENAI")
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 CASES = [
@@ -161,6 +162,7 @@ CASES = [
     }
 ]
 
+
 NPCS = {
     "npc1": "Eres un mayordomo educado pero reservado.",
     "npc2": "Eres una jardinera que oculta cosas.",
@@ -172,57 +174,124 @@ NPCS = {
     "npc8": "Eres un niño prodigio muy observador."
 }
 
-def get_or_create_gamestate():
-    gs, created = GameState.objects.get_or_create(id=1)
-    if created or not gs.assassin or not gs.case_id:
-        gs.assassin = random.choice(list(NPCS.keys()))
-        case = random.choice(CASES)
-        gs.case_id = case["id"]
-        gs.save()
+# ---------------------------------------------
+# STATE MANAGEMENT
+# ---------------------------------------------
+
+def reset_gamestate():
+    """Crea un nuevo juego con un caso y asesino aleatorio."""
+    GameState.objects.filter(id=1).delete()
+    gs = GameState.objects.create(
+        id=1,
+        assassin=random.choice(list(NPCS.keys())),
+        case_id=random.choice(CASES)["id"]
+    )
     return gs
 
+
+def get_gamestate():
+    """Devuelve el estado actual sin modificarlo.
+       Si no existe, crea uno nuevo."""
+    try:
+        return GameState.objects.get(id=1)
+    except GameState.DoesNotExist:
+        return reset_gamestate()
+
+
 def get_current_case():
-    gs = get_or_create_gamestate()
+    gs = get_gamestate()
     for case in CASES:
         if case["id"] == gs.case_id:
             return case
     return None
 
+
+# ---------------------------------------------
+# PROMPT CREATION
+# ---------------------------------------------
+
 def get_npc_prompt(npc_id):
-    assassin = get_or_create_gamestate().assassin
+    gs = get_gamestate()
+    assassin = gs.assassin
     case = get_current_case()
+
+    # Contexto del caso
     case_context = (
         f"Caso: {case['title']}\n"
         f"Descripción: {case['description']}\n"
-        f"Detalles: {case['details']}\n\n"
+        f"Detalles conocidos: {case['details']}\n\n"
+        "IMPORTANTE: Puedes ampliar, inferir o añadir detalles menores "
+        "siempre que no contradigas los hechos principales.\n\n"
     )
 
-    base_prompt = NPCS[npc_id]
+    # Rol base del NPC
+    npc_personality = NPCS[npc_id]
 
+    # Inocentes vs Asesino
     if npc_id == assassin:
-        base_prompt += " Eres el asesino del crimen. Mientes para esconder tu culpabilidad y tratas de despistar al jugador."
+        role = (
+            "Eres el asesino. Debes mentir con creatividad, ofrecer coartadas nuevas, "
+            "desviar sospechas y generar detalles falsos que parezcan plausibles. "
+            "Tu objetivo es confundir."
+        )
     else:
-        base_prompt += " Sabes que eres inocente y das respuestas honestas para ayudar a resolver el caso."
-    base_prompt += " Responde sólo con la respuesta del personaje, sin poner su nombre ni etiquetas."
-    return case_context + base_prompt
+        role = (
+            "Eres inocente. Ayudas con sinceridad e intentas aportar "
+            "recuerdos, impresiones, pistas nuevas o teorías razonables "
+            "que no están explícitamente en los detalles pero que podrían ayudar al jugador."
+        )
+
+    # Forma de hablar
+    style = (
+        "Responde siempre en primera persona, como si realmente estuvieras allí. "
+        "NO pongas tu nombre ni etiquetas. No repitas literalmente las frases del caso. "
+        "Cada respuesta debe aportar algo nuevo: una observación, un detalle, "
+        "una emoción, una suposición o un recuerdo."
+    )
+
+    return f"{case_context}{npc_personality} {role} {style}"
+
+
+# ---------------------------------------------
+# NPC RESPONSE GENERATION
+# ---------------------------------------------
 
 def get_npc_response(npc_id, history):
-    prompt = get_npc_prompt(npc_id)
+    """
+    history debe ser una lista de mensajes:
+    [
+        {"role": "user", "content": "texto del jugador"},
+        {"role": "assistant", "content": "respuesta anterior del NPC"},
+        ...
+    ]
+    """
+    if not isinstance(history, list):
+        # Fallback en caso de que aún lo envíes como texto
+        history = [{"role": "user", "content": history}]
 
-    messages = [{"role": "system", "content": prompt}]
-    messages.append({"role": "user", "content": history})
+    system_prompt = get_npc_prompt(npc_id)
+
+    messages = [{"role": "system", "content": system_prompt}]
+    messages.extend(history)
 
     response = openai.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-3.5-turbo",             
         messages=messages,
-        temperature=0.7
+        temperature=0.80,                
+        max_tokens=250,
+        presence_penalty=0.8,             
+        frequency_penalty=0.4
     )
 
-    return response.choices[0].message.content
+    return response.choices[0].message.content.strip()
 
+
+# ---------------------------------------------
+# ACCUSATION CHECK
+# ---------------------------------------------
 
 def check_accusation(npc_id):
-    gs = get_or_create_gamestate()
+    gs = get_gamestate()
     if npc_id == gs.assassin:
         return True, f"¡Correcto! {npc_id} es el culpable. Has resuelto el caso."
     else:
