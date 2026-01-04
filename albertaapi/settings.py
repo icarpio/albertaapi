@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'traductor',
     'interpreter',
     'horoscope',
-    'napolipizza'
+    'napolipizza',
+    'assistants'
      
 ]
 

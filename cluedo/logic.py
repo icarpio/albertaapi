@@ -115,51 +115,352 @@ CASES = [
             "El niño prodigio encontró restos de pintura en el suelo."
         )
     },
-    {
+        {
         "id": 8,
-        "title": "El encuentro en la biblioteca",
-        "description": "Dos personas discutieron acaloradamente en la biblioteca horas antes del crimen.",
+        "title": "El último brindis",
+        "description": "El anfitrión cayó fulminado tras proponer un brindis en la cena de gala. Su copa de champán contenía un potente veneno inodoro.",
         "details": (
-            "El detective retirado escuchó la discusión desde el pasillo. "
-            "El niño prodigio encontró una nota misteriosa con amenazas. "
-            "El mayordomo fue quien abrió la biblioteca esa noche. "
-            "La jardinera limpiaba las ventanas y vio a los dos sujetos discutir. "
-            "El periodista intentó grabar la conversación, pero fue descubierto. "
-            "La anciana confundió la discusión con una obra de teatro. "
-            "El chef dijo haber oído el ruido mientras preparaba una infusión. "
-            "El vecino fue visto saliendo apresuradamente tras la pelea."
+            "El mayordomo fue quien sirvió las copas desde una bandeja de plata. "
+            "El chef tenía acceso a veneno para ratas en la despensa de la cocina. "
+            "La anciana estaba sentada a su derecha y se le vio intercambiar las copas. "
+            "El periodista distrajo a todos con un flashazo justo antes del brindis. "
+            "El detective retirado notó un olor a almendras amargas, pero calló. "
+            "El vecino trajo su propia botella de vino y la ofreció insistentemente. "
+            "La jardinera cultiva adelfas venenosas en el patio trasero. "
+            "El niño prodigio recogió la copa vacía antes de que la policía la analizara."
         )
     },
     {
         "id": 9,
-        "title": "El teléfono desconectado",
-        "description": "El teléfono de la víctima fue desconectado justo antes del ataque.",
+        "title": "La caída fatal",
+        "description": "La víctima fue encontrada al pie de la gran escalera de mármol. Parece un accidente, pero el pasamanos estaba aflojado intencionalmente.",
         "details": (
-            "El mayordomo fue el último en usar el teléfono. "
-            "La jardinera estaba cerca de la centralita revisando un enchufe. "
-            "El periodista intentaba llamar a su editor, pero la línea no funcionaba. "
-            "El chef culpó al cableado viejo, aunque sabía repararlo. "
-            "El detective retirado revisó el cableado tras el incidente. "
-            "La anciana intentó llamar a su nieta y no obtuvo tono. "
-            "El niño prodigio encontró marcas de corte en el cable. "
-            "El vecino dijo que escuchó interferencias antes del corte."
+            "El vecino fue visto subiendo las escaleras con una caja de herramientas. "
+            "La jardinera limpió el piso superior con cera extra deslizante. "
+            "El detective retirado estaba en el rellano y escuchó una discusión previa. "
+            "El mayordomo asegura que la alfombra de la escalera estaba bien colocada antes. "
+            "El niño prodigio estaba jugando con canicas cerca del borde de los escalones. "
+            "El periodista tomó fotos del cadáver desde un ángulo sospechosamente perfecto. "
+            "La anciana dice que vio un 'fantasma' empujando a la víctima. "
+            "El chef tenía una vieja rencilla con la víctima por un préstamo no devuelto."
         )
     },
     {
-        "id": 10,
-        "title": "El testamento perdido",
-        "description": "El testamento de la víctima desapareció misteriosamente.",
+        "id":10,
+        "title": "Crimen en el cuarto oscuro",
+        "description": "Durante el revelado de fotografías en el laboratorio casero, alguien apuñaló a la víctima aprovechando la total oscuridad y el ruido del extractor de aire.",
         "details": (
-            "El vecino estuvo revisando documentos antiguos. "
-            "El chef escuchó conversaciones sobre una posible herencia. "
-            "El mayordomo tenía acceso a la caja fuerte donde estaba guardado. "
-            "La jardinera encontró papeles quemados cerca del invernadero. "
-            "El periodista sabía del testamento y preparaba un artículo. "
-            "La anciana dijo que lo vio por última vez en el escritorio. "
-            "El detective retirado halló un compartimento oculto vacío. "
-            "El niño prodigio notó que faltaba una página del registro familiar."
+            "El periodista era el único que sabía usar el equipo de revelado. "
+            "La anciana entró por error buscando el baño y escuchó un gemido. "
+            "El mayordomo cerró la puerta con llave desde fuera 'por costumbre'. "
+            "El vecino tiene una colección de cuchillos que coincide con la herida. "
+            "El niño prodigio cortó la electricidad de la casa por unos segundos. "
+            "El chef estaba limpiando pescado cerca y tenía las manos manchadas de rojo. "
+            "La jardinera necesitaba químicos del laboratorio para sus fertilizantes. "
+            "El detective retirado encontró huellas dactilares borradas en el interruptor."
+        )
+    },
+    {
+        "id": 11,
+        "title": "Ahogado en la fuente",
+        "description": "A la mañana siguiente, el cuerpo del abogado de la familia apareció flotando en la fuente ornamental del jardín, con un golpe en la nuca.",
+        "details": (
+            "La jardinera fue la primera en llegar y tenía las botas empapadas. "
+            "El detective retirado encontró un trozo de tela enganchado en una estatua. "
+            "El mayordomo discutió con el abogado sobre su salario la noche anterior. "
+            "El vecino fue visto saltando la valla del jardín a medianoche. "
+            "El chef admite haber tirado restos de comida cerca de la fuente. "
+            "La anciana escuchó un chapoteo, pero pensó que era el perro. "
+            "El periodista buscaba documentos que el abogado llevaba en su maletín. "
+            "El niño prodigio estaba probando su barco teledirigido en esa misma fuente."
+        )
+    },
+    {
+        "id": 12,
+        "title": "La daga ceremonial",
+        "description": "El coleccionista de antigüedades fue hallado muerto en su estudio. La vitrina está rota y falta una valiosa daga persa, el arma del crimen.",
+        "details": (
+            "El detective retirado sabía exactamente cuánto valía esa daga. "
+            "El mayordomo tenía la única copia de la llave de la vitrina. "
+            "El vecino había ofrecido comprar la daga tres veces y fue rechazado. "
+            "La jardinera entró por la ventana del estudio para regar los helechos. "
+            "El periodista escribió un artículo exponiendo que la daga era robada. "
+            "La anciana limpió los cristales rotos antes de que llegara nadie. "
+            "El niño prodigio dibujó la daga en su cuaderno con detalles inquietantes. "
+            "El chef usó un cuchillo muy similar para cortar el asado de la cena."
+        )
+    },
+    {
+        "id": 13,
+        "title": "Muerte en el baño turco",
+        "description": "La víctima quedó encerrada en la sauna de la mansión. Alguien bloqueó la puerta y subió la temperatura al máximo, provocando un fallo cardíaco.",
+        "details": (
+            "El mayordomo encendió la sauna, pero jura que la dejó a temperatura media. "
+            "El chef se quejó del vapor que entraba en su cocina contigua. "
+            "El vecino es electricista y sabe cómo puentear el termostato. "
+            "La anciana dice que vio a alguien poner una silla atrancando la puerta. "
+            "El detective retirado encontró un cronómetro cerca de la entrada. "
+            "La jardinera usaba la sauna para secar hierbas aromáticas en secreto. "
+            "El periodista tenía una cita con la víctima en el spa, pero no se presentó. "
+            "El niño prodigio sabe la combinación numérica del panel de control."
+        )
+    },
+    {
+        "id": 14,
+        "title": "La partida de póker",
+        "description": "En medio de una partida de cartas de altas apuestas, se fue la luz. Al volver, el ganador yacía muerto sobre la mesa con las fichas esparcidas.",
+        "details": (
+            "El vecino había perdido una fortuna contra la víctima minutos antes. "
+            "El mayordomo sostenía un candelabro pesado que tiene manchas sospechosas. "
+            "El detective retirado estaba vigilando la partida para evitar trampas. "
+            "El chef sirvió whisky y vio quién tenía la mejor mano. "
+            "La jardinera cortó las rosas exteriores y pudo haber cortado el cable de luz. "
+            "El periodista estaba escondido debajo de la mesa grabando la partida. "
+            "La anciana dice que la víctima le guiñó el ojo antes de morir. "
+            "El niño prodigio contó las cartas y sabía que la víctima estaba haciendo trampa."
+        )
+    },
+    {
+        "id": 15,
+        "title": "El accidente de caza",
+        "description": "En la sala de trofeos, una escopeta antigua que debía estar descargada se disparó 'accidentalmente' mientras la víctima la limpiaba.",
+        "details": (
+            "El detective retirado revisó el arma ayer y aseguró que era segura. "
+            "El mayordomo entregó el kit de limpieza a la víctima. "
+            "El vecino es un experto tirador y odiaba a la víctima. "
+            "El niño prodigio encontró cartuchos vivos en el cubo de basura. "
+            "La anciana estaba en la habitación de al lado y no escuchó el disparo. "
+            "El periodista escribió sobre la venta ilegal de armas de la familia. "
+            "La jardinera vio a alguien salir corriendo por la ventana de la sala. "
+            "El chef usó pólvora para un truco de cocina flambé esa noche."
+        )
+    },
+    {
+        "id": 16,
+        "title": "El collar de perlas",
+        "description": "La dueña de la casa fue estrangulada con su propio collar de perlas. Las perlas rodaron por todo el suelo del dormitorio, haciendo caer al asesino.",
+        "details": (
+            "La anciana codiciaba ese collar desde hacía cincuenta años. "
+            "El mayordomo tiene un moretón en la rodilla, como si se hubiera caído. "
+            "El periodista encontró una perla en su bolsillo y no sabe cómo llegó ahí. "
+            "La jardinera barrió el pasillo y encontró el cierre roto del collar. "
+            "El detective retirado analizó el nudo y dijo que era de estilo marinero. "
+            "El vecino fue visto en una casa de empeños preguntando por perlas. "
+            "El niño prodigio estaba haciendo un collar falso con cuentas de plástico. "
+            "El chef llevó el desayuno a la cama y encontró el cuerpo primero."
+        )
+    },
+        {
+        "id": 17,
+        "title": "El secreto del armario",
+        "description": "El patriarca de la familia fue encontrado muerto en su despacho justo antes de publicar sus memorias, donde planeaba revelar su relación secreta de 40 años con su 'mejor amigo'.",
+        "details": (
+            "La anciana (su esposa) sabía la verdad y temía el escándalo social. "
+            "El mayordomo era ese 'mejor amigo' y heredero secreto, ahora principal sospechoso. "
+            "El vecino chantajeaba a la víctima con fotos antiguas de ambos hombres. "
+            "El periodista quería la exclusiva y forzó la caja fuerte buscando el manuscrito. "
+            "El detective retirado investigó el pasado de la víctima por encargo de los hijos. "
+            "El niño prodigio encontró una carta de amor a medio quemar en la chimenea. "
+            "La jardinera escuchó una pelea sobre 'arruinar la reputación de la familia'. "
+            "El chef preparó una cena romántica para dos hombres esa noche, que nadie probó."
+        )
+    },
+    {
+        "id": 18,
+        "title": "La diva silenciada",
+        "description": "Durante una fiesta privada, la famosa Drag Queen 'Lady Diamond' fue envenenada en su camerino improvisado. Su peluca ocultaba un documento crucial.",
+        "details": (
+            "El periodista era una expareja rencorosa que fue ridiculizada en el show. "
+            "La anciana se ofendió por la actuación y fue vista manipulando las bebidas. "
+            "El niño prodigio vio a alguien poner polvo en el maquillaje de la artista. "
+            "El chef odiaba a la víctima por una crítica mordaz a su catering en el pasado. "
+            "El vecino es un político conservador que temía ser reconocido por la artista. "
+            "El mayordomo ayudó a la víctima a vestirse y fue el último en verla viva. "
+            "La jardinera encontró las tacones de la víctima rotos intencionalmente en el jardín. "
+            "El detective retirado descubrió que 'Lady Diamond' era en realidad el heredero desaparecido de la mansión."
+        )
+    },
+    {
+        "id": 19,
+        "title": "La boda interrumpida",
+        "description": "Iba a celebrarse la primera boda entre dos mujeres en la historia de la mansión, pero una de las novias desapareció y se hallaron restos de sangre en el altar.",
+        "details": (
+            "El vecino estaba enamorado obsesivamente de una de las novias. "
+            "La jardinera, ex-pareja de la víctima, estaba podando arbustos cerca del altar. "
+            "El mayordomo se oponía a la boda alegando 'tradiciones familiares'. "
+            "El chef discutió con la pareja por el diseño del pastel nupcial. "
+            "La anciana amenazó con desheredar a su nieta si la boda continuaba. "
+            "El periodista se coló en la ceremonia buscando drama familiar. "
+            "El detective retirado encontró el velo rasgado y manchado en el sótano. "
+            "El niño prodigio vio a alguien huir en el coche de los recien casados."
+        )
+    },
+    {
+        "id": 20,
+        "title": "El cambio de testamento",
+        "description": "El tío millonario anunció que dejaría toda su fortuna a una fundación de apoyo a jóvenes trans, desheredando a su familia. Esa misma noche fue empujado por el balcón.",
+        "details": (
+            "El sobrino (representado por el vecino) estaba furioso por perder la herencia. "
+            "El mayordomo fue testigo de la firma del nuevo testamento. "
+            "La anciana creía que la fundación era una estafa y quería 'proteger' el dinero. "
+            "El periodista investigaba las finanzas de la fundación en secreto. "
+            "El chef temía perder su empleo si la mansión se convertía en sede de la ONG. "
+            "La jardinera es voluntaria en la fundación y visitó a la víctima esa noche. "
+            "El detective retirado notó que la barandilla del balcón fue serrada. "
+            "El niño prodigio escuchó el grito de caída, pero pensó que era la televisión."
+        )
+    },
+      {
+        "id": 21,
+        "title": "La escultura de carne",
+        "description": "La víctima no fue asesinada, fue 'reorganizada'. Sus extremidades fueron cosidas en lugares incorrectos para formar una grotesca estatua humana en el centro del salón de baile.",
+        "details": (
+            "El mayordomo encontró hilo quirúrgico en el bolsillo del abrigo del vecino. "
+            "El chef se quejó de que faltaban sus cuchillos de deshuesar más afilados. "
+            "La jardinera notó que la tierra del invernadero olía a formol. "
+            "El niño prodigio dibujó la 'estatua' días antes de que apareciera. "
+            "La anciana cree que es una obra de arte moderno y la admira sin horror. "
+            "El detective retirado vomitó al ver la precisión anatómica de los cortes. "
+            "El periodista descubrió que la víctima estaba viva durante el proceso. "
+            "El vecino tenía un manual de taxidermia abierto en su mesita de noche."
+        )
+    },
+    {
+        "id": 22,
+        "title": "El banquete caníbal",
+        "description": "Los invitados cenaron un estofado exquisito, solo para descubrir al final que la víctima desaparecida había sido el ingrediente principal. Su cabeza fue servida como postre en una bandeja de plata.",
+        "details": (
+            "El chef lloraba en la cocina mientras afilaba un hacha de carnicero. "
+            "La anciana pidió repetir el plato, diciendo que la carne era muy tierna. "
+            "El mayordomo sirvió el vino con manos temblorosas y manchadas de rojo seco. "
+            "El periodista encontró un dedo humano en su copa de brandy. "
+            "El vecino es un cazador que sabe despellejar presas en minutos. "
+            "El niño prodigio se negó a comer porque 'la comida le habló'. "
+            "La jardinera encontró restos de ropa ensangrentada en el compostador. "
+            "El detective retirado notó que faltaban órganos específicos en los restos."
+        )
+    },
+    {
+        "id": 23,
+        "title": "La caja de música humana",
+        "description": "El cuerpo fue hallado abierto en canal, con sus órganos conectados a un mecanismo de relojería. Al dar cuerda, los pulmones y el corazón se movían al ritmo de una macabra melodía.",
+        "details": (
+            "El niño prodigio estaba fascinado con los engranajes insertados en el pecho. "
+            "El vecino relojero había perdido sus herramientas de precisión esa mañana. "
+            "El mayordomo escuchó un 'tic-tac' constante proveniente del cadáver. "
+            "La anciana tarareaba la misma canción que tocaba el cuerpo. "
+            "El periodista vio planos de anatomía mecánica en el cuarto del chef. "
+            "La jardinera encontró venas usadas como cuerdas de violín en el suelo. "
+            "El detective retirado identificó la técnica como una tortura medieval modernizada. "
+            "El chef usó pinzas para extraer el hígado sin detener el mecanismo."
+        )
+    },
+    {
+        "id": 24,
+        "title": "Los ojos del voyeur",
+        "description": "La víctima fue encontrada atada a una silla frente a una pared llena de espejos. Sus párpados fueron cortados para que no pudiera cerrar los ojos ni siquiera al morir de terror.",
+        "details": (
+            "El periodista tenía una colección de fotos de ojos humanos en su cámara. "
+            "El mayordomo limpió los espejos, pero dejó marcas de arrastre. "
+            "La anciana dijo que la víctima 'ahora sí podía ver la verdad'. "
+            "El vecino fue visto comprando gotas para dilatar las pupilas. "
+            "El detective retirado encontró un bisturí oxidado bajo la alfombra. "
+            "El niño prodigio jugaba a 'quien parpadea pierde' con el cadáver. "
+            "El chef usó salmuera, lo que aumentó el dolor de la víctima. "
+            "La jardinera podó las rosas con tijeras que tenían restos de pestañas."
+        )
+    },
+    {
+        "id": 25,
+        "title": "La piel ajena",
+        "description": "El cadáver apareció desollado con una precisión quirúrgica. Lo más terrorífico es que alguien está caminando por la mansión vistiendo la piel de la víctima como un traje.",
+        "details": (
+            "El mayordomo notó que el 'señor' sudaba sangre y olía a carne cruda. "
+            "La jardinera encontró la piel del rostro secándose en el tendero. "
+            "El detective retirado vio una cremallera cosida en la espalda del sospechoso. "
+            "El niño prodigio preguntó por qué el vecino tenía dos ombligos hoy. "
+            "La anciana acarició el brazo del asesino y notó que estaba frío y húmedo. "
+            "El chef encontró restos de dermis en el triturador de basura. "
+            "El periodista notó que la ropa le quedaba grande a la víctima, o a quien fingía serlo. "
+            "El vecino tenía un kit de curtido de pieles oculto en su garaje."
+        )
+    },
+    {
+        "id": 26,
+        "title": "El jardín de los gritos",
+        "description": "Las víctimas fueron enterradas hasta el cuello en el jardín y rociadas con feromonas para atraer insectos y roedores, siendo devoradas vivas lentamente.",
+        "details": (
+            "La jardinera cuidaba las cabezas como si fueran coles, regándolas. "
+            "El vecino criaba ratas hambrientas en el sótano. "
+            "El mayordomo escuchó los gritos pero subió el volumen de la música clásica. "
+            "El niño prodigio capturaba hormigas rojas y las soltaba cerca de las caras. "
+            "El periodista grabó el sonido de la agonía para un podcast de terror. "
+            "La anciana pensó que las cabezas eran adornos de Halloween muy realistas. "
+            "El chef usó miel para cubrir los rostros de las víctimas. "
+            "El detective retirado encontró un cronómetro midiendo el tiempo de muerte."
+        )
+    },
+    {
+        "id": 27,
+        "title": "La marioneta de sangre",
+        "description": "La víctima fue colgada del techo del vestíbulo con alambres de púas atravesando sus articulaciones. El asesino la manipulaba desde arriba, haciéndola 'bailar' mientras se desangraba.",
+        "details": (
+            "El niño prodigio aplaudía al ver al cuerpo moverse espasmódicamente. "
+            "El mayordomo tenía las manos llenas de cortes por manipular los alambres. "
+            "El vecino es experto en nudos y poleas. "
+            "La anciana pidió que la marioneta hiciera una reverencia final. "
+            "El periodista notó que los alambres estaban conectados a la lámpara de araña. "
+            "El chef se resbaló en el charco de sangre que se formaba bajo el cuerpo. "
+            "La jardinera usó guantes gruesos para no pincharse con las púas. "
+            "El detective retirado disparó a la cuerda para acabar con el sufrimiento."
+        )
+    },
+    {
+        "id": 28,
+        "title": "La transfusión inversa",
+        "description": "La víctima fue conectada a una máquina que, en lugar de darle sangre, la reemplazó lentamente con ácido corrosivo mientras estaba consciente y atada.",
+        "details": (
+            "El chef tenía botellas de ácido industrial para limpiar hornos. "
+            "El detective retirado reconoció las marcas de agujas en los brazos. "
+            "El vecino, un ex-químico, diseñó la mezcla para que no matara al instante. "
+            "El mayordomo vigilaba el flujo del líquido como si fuera un experimento. "
+            "La anciana se quejó del olor a 'huevo podrido' (azufre) en la habitación. "
+            "El niño prodigio calculó cuánto tiempo tardaría en disolverse el corazón. "
+            "El periodista tomó fotos del cambio de color en las venas de la víctima. "
+            "La jardinera usó la sangre drenada para regar sus orquídeas negras."
+        )
+    },
+    {
+        "id": 29,
+        "title": "El parto de la bestia",
+        "description": "Se encontró el cuerpo de un hombre con el abdomen abierto brutalmente. Dentro de él, alguien había cosido un animal vivo (una rata o un gato) que intentaba salir arañando desde el interior.",
+        "details": (
+            "La anciana decía que escuchaba maullidos provenientes del estómago del muerto. "
+            "El chef notó que faltaba el gato de la cocina. "
+            "El vecino tenía hilo de pescar grueso y agujas curvas ensangrentadas. "
+            "El niño prodigio miraba fijamente el movimiento bajo la piel del cadáver. "
+            "El mayordomo limpió las huellas de garras en el suelo alrededor del cuerpo. "
+            "El periodista escribió 'bizarro' en su libreta con mano temblorosa. "
+            "La jardinera atrapó al animal cuando finalmente logró salir. "
+            "El detective retirado nunca había visto tal crueldad en 30 años de servicio."
+        )
+    },
+    {
+        "id": 30,
+        "title": "El rompecabezas humano",
+        "description": "La víctima fue cortada en cubos perfectos de 10x10 cm. Los trozos fueron numerados y esparcidos por la casa para que los invitados tuvieran que 'rearmar' al muerto.",
+        "details": (
+            "El niño prodigio resolvió el rompecabezas en tiempo récord. "
+            "El chef usó una cortadora de fiambre industrial para lograr la precisión. "
+            "El mayordomo encontró la pieza número 4 (la nariz) en el buzón. "
+            "La anciana guardó un cubo en su bolso pensando que era un regalo. "
+            "El vecino ayudó a mover los trozos más pesados del torso. "
+            "El periodista encontró la pieza faltante dentro de la pecera. "
+            "La jardinera se negó a tocar los trozos porque manchaban la alfombra. "
+            "El detective retirado notó que faltaba el corazón: el asesino se lo quedó."
         )
     }
+  
 ]
 
 

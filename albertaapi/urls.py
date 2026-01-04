@@ -20,6 +20,7 @@ urlpatterns = [
     path('api5/', include('traductor.urls')),
     path('api6/', include('stories.urls')), 
     path('api7/', include('horoscope.urls')),
+    path('api8/', include('assistants.urls')),
 ]
 
 #handler404 = 'minigames.views.custom_404_view'  
