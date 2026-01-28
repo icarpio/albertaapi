@@ -21,6 +21,7 @@ urlpatterns = [
     path('api6/', include('stories.urls')), 
     path('api7/', include('horoscope.urls')),
     path('api8/', include('assistants.urls')),
+    path("api9/", include("questionsapp.urls")),
 ]
 
 #handler404 = 'minigames.views.custom_404_view'  

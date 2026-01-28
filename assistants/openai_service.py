@@ -12,7 +12,7 @@ def create_assistant(name: str, instructions: str) -> dict:
         assistant = openai.Client().beta.assistants.create(
             name=name,
             instructions=instructions,
-            model="gpt-4o-mini"
+            model="GPT‑5‑nano"   #gpt-4o-mini - respuestas más elaboradas o contextos largos
         )
 
         # Retornar dict seguro
