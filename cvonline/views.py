@@ -63,7 +63,7 @@ def contact_api(request):
         """
         resend.Emails.send({
             "from": "Tu Web <onboarding@resend.dev>",
-            "to": [os.getenv('EMAIL_USER', 'fallback@example.com')],
+            "to": "icarpiodeveloper@gmail.com",
             "subject": subject,
             "text": text_content,
             "html": html_content,
