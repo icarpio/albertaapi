@@ -24,7 +24,7 @@ def order_api(request):
     order = serializer.save()
 
     try:
-        resend.api_key = os.environ.get("RESEND_API_KEY")
+        resend.api_key = os.environ.get("EMAIL_SEND")
 
         total = order.total_price()
 
