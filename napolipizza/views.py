@@ -1,133 +1,158 @@
+from .serializers import OrderSerializer
+from .models import Pizza
+from .serializers import PizzaSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework import status
-from django.core.mail import EmailMultiAlternatives
-from email.mime.image import MIMEImage
-import os
-from .serializers import OrderSerializer
 from django.views.decorators.csrf import csrf_exempt
-from .models import Pizza
-from .serializers import PizzaSerializer
+from .serializers import OrderSerializer
+import os
+import resend
+
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
 @csrf_exempt
 def order_api(request):
+
     serializer = OrderSerializer(data=request.data)
     if not serializer.is_valid():
-        return Response({'success': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {'success': False, 'errors': serializer.errors},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
-    # Guardar el pedido
     order = serializer.save()
 
     try:
-        from_email = os.getenv('EMAIL_USER', 'fallback@example.com')
+        resend.api_key = os.environ.get("EMAIL_SEND")
+
+        from_email = "Napoli Pizza"
         total = order.total_price()
 
-        # --- Enviar email al restaurante ---
-        subject_restaurant = f"Nuevo pedido de {order.customer_name}"
-        to_email_restaurant = [from_email]
-
+        # 🧾 ITEMS
         items_text_list = []
         items_html_list = []
+
         for item in order.items.all():
             subtotal = item.quantity * item.pizza.price
-            items_text_list.append(f"{item.quantity} x {item.pizza.name} - ${item.pizza.price} c/u - Subtotal: ${subtotal}")
-            items_html_list.append(f"<p>{item.quantity} x {item.pizza.name} - ${item.pizza.price} c/u - Subtotal: ${subtotal}</p>")
+            items_text_list.append(
+                f"{item.quantity} x {item.pizza.name} - ${item.pizza.price} c/u - Subtotal: ${subtotal}"
+            )
+            items_html_list.append(
+                f"<p>{item.quantity} x {item.pizza.name} - ${item.pizza.price} c/u - Subtotal: ${subtotal}</p>"
+            )
 
         items_text = "\n".join(items_text_list)
         items_html = "".join(items_html_list)
 
-        text_content_restaurant = f"""
+        # 🖼️ IMAGEN (URL pública, NO archivo local)
+        pizza_img = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/500px-Coca-Cola_logo.svg.png"
+        # =========================
+        # 📩 EMAIL RESTAURANTE
+        # =========================
+
+        subject_restaurant = f"Nuevo pedido de {order.customer_name}"
+
+        text_restaurant = f"""
 Nuevo pedido recibido:
 
 Cliente: {order.customer_name}
 Email: {order.customer_email}
 Teléfono: {order.customer_phone}
+
 Pizzas:
 {items_text}
 
-Mensaje adicional: {order.message or ''}
+Mensaje: {order.message or ''}
+
 Total: ${total}
 """
 
-        html_content_restaurant = f"""
-<h2>Nuevo Pedido de Pizza</h2>
-<p><img src="cid:image1" alt="Pizza"/></p>
-<p><strong>Cliente:</strong> {order.customer_name}</p>
-<p><strong>Email:</strong> {order.customer_email}</p>
-<p><strong>Teléfono:</strong> {order.customer_phone}</p>
-<h3>Pizzas:</h3>
-{items_html}
-<p><strong>Mensaje adicional:</strong> {order.message or ''}</p>
-<p><strong>Total:</strong> ${total}</p>
+        html_restaurant = f"""
+        <div style="font-family: Arial;">
+            <h2>🍕 Nuevo Pedido de Pizza</h2>
+
+            <img src="{pizza_img}" width="120" />
+
+            <p><strong>Cliente:</strong> {order.customer_name}</p>
+            <p><strong>Email:</strong> {order.customer_email}</p>
+            <p><strong>Teléfono:</strong> {order.customer_phone}</p>
+
+            <h3>Pizzas:</h3>
+            {items_html}
+
+            <p><strong>Mensaje:</strong> {order.message or ''}</p>
+            <h3>Total: ${total}</h3>
+        </div>
+        """
+
+        resend.Emails.send({
+            "from": from_email,
+            "to": ["icarpiodeveloper@gmail.com"],
+            "subject": subject_restaurant,
+            "text": text_restaurant,
+            "html": html_restaurant,
+            "reply_to": order.customer_email
+        })
+
+        # =========================
+        # 📩 EMAIL CLIENTE
+        # =========================
+
+        subject_client = f"Confirmación de tu pedido, {order.customer_name}"
+
+        text_client = f"""
+Hola {order.customer_name},
+
+Hemos recibido tu pedido correctamente.
+
+Pizzas:
+{items_text}
+
+Total: ${total}
+
+¡Gracias por tu compra!
 """
 
-        msg_restaurant = EmailMultiAlternatives(subject_restaurant, text_content_restaurant, from_email, to_email_restaurant)
-        msg_restaurant.attach_alternative(html_content_restaurant, "text/html")
+        html_client = f"""
+        <div style="font-family: Arial; text-align: center;">
 
-        # Imagen embebida
-        image_path = os.path.join(os.path.dirname(__file__), 'pizza.png')
-        if os.path.exists(image_path):
-            with open(image_path, 'rb') as f:
-                img_data = f.read()
-            image = MIMEImage(img_data, _subtype='png')
-            image.add_header('Content-ID', '<image1>')
-            msg_restaurant.attach(image)
+            <h1>
+                Napoli Pizza
+            </h1>
 
-        msg_restaurant.send()
+            <img src="{pizza_img}" width="100" />
 
-        # --- Enviar correo de confirmación al cliente ---
-        subject_client = f"Confirmación de tu pedido, {order.customer_name}"
-        to_email_client = [order.customer_email]
+            <h2>Tu pedido ha sido recibido 🍕</h2>
 
-        text_content_client = f"""
-        Hola {order.customer_name},
+            <p>Hola <strong>{order.customer_name}</strong></p>
 
-        Hemos recibido tu pedido de pizza correctamente. Aquí están los detalles:
+            {items_html}
 
-        Pizzas:
-        {items_text}
+            <h3>Total: ${total}</h3>
 
-        Total: ${total}
-
-        ¡Gracias por tu preferencia!
+            <p>¡Gracias por tu preferencia!</p>
+        </div>
         """
 
-        html_content_client = f"""
-        <h1 style="display: flex; align-items: center; gap: 10px;">
-        Napoli Pizza
-        <img src="cid:image1" alt="Pizza" style="height: 50px;"/>
-        </h1>
-        <h2>Tu pedido ha sido recibido</h2>
-        <p>Hola <strong>{order.customer_name}</strong>,</p>
-        <p>Hemos recibido tu pedido de pizza correctamente. Aquí están los detalles:</p>
-        {items_html}
-        <p><strong>Total:</strong> ${total}</p>
-        <p>¡Gracias por tu preferencia!</p>
-        """
-
-        msg_client = EmailMultiAlternatives(subject_client, text_content_client, from_email, to_email_client)
-        msg_client.attach_alternative(html_content_client, "text/html")
-
-        # Imagen embebida para el cliente
-        image_path = os.path.join(os.path.dirname(__file__), 'pizza.png')
-        if os.path.exists(image_path):
-            with open(image_path, 'rb') as f:
-                img_data = f.read()
-            image = MIMEImage(img_data, _subtype='png')
-            image.add_header('Content-ID', '<image1>')
-            msg_client.attach(image)  # <-- aquí se adjunta al mensaje correcto
-
-        msg_client.send()
-
+        resend.Emails.send({
+            "from": from_email,
+            "to": [order.customer_email],
+            "subject": subject_client,
+            "text": text_client,
+            "html": html_client,
+        })
 
         return Response({'success': True}, status=status.HTTP_200_OK)
 
     except Exception as e:
-        return Response({'success': False, 'errors': {'email': ['Error enviando email', str(e)]}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+        print("ERROR EMAIL:", e)
+        return Response(
+            {'success': False, 'errors': {'email': ['Error enviando email']}},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 @api_view(['GET'])
 @permission_classes([AllowAny])

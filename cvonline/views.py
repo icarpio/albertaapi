@@ -58,7 +58,6 @@ def contact_api(request):
             <p style="text-align:left;">
                 {data.get('message','').replace('\n','<br>')}
             </p>
-
         </div>
         """
         resend.Emails.send({
