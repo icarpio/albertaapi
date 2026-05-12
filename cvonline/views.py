@@ -39,7 +39,7 @@ def contact_api(request):
         )
 
         # 🖼️ IMAGEN CORRECTA (IMPORTANTE: URL pública, NO archivo local)
-        logo_url = "https://albertaapi.onrender.com/static/logo.png"
+        logo_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/500px-Coca-Cola_logo.svg.png"
 
         html_content = f"""
         <div style="font-family: Arial; text-align: center;">
