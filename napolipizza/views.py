@@ -28,7 +28,7 @@ def order_api(request):
     try:
         resend.api_key = os.environ.get("EMAIL_SEND")
 
-        from_email = "Napoli Pizza"
+        from_email = "Napoli Pizza <onboarding@resend.dev>"
         total = order.total_price()
 
         # 🧾 ITEMS
@@ -49,6 +49,7 @@ def order_api(request):
 
         # 🖼️ IMAGEN (URL pública, NO archivo local)
         pizza_img = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/500px-Coca-Cola_logo.svg.png"
+
         # =========================
         # 📩 EMAIL RESTAURANTE
         # =========================
@@ -73,21 +74,16 @@ Total: ${total}
         html_restaurant = f"""
         <div style="font-family: Arial;">
             <h2>🍕 Nuevo Pedido de Pizza</h2>
-
             <img src="{pizza_img}" width="120" />
-
             <p><strong>Cliente:</strong> {order.customer_name}</p>
             <p><strong>Email:</strong> {order.customer_email}</p>
             <p><strong>Teléfono:</strong> {order.customer_phone}</p>
-
             <h3>Pizzas:</h3>
             {items_html}
-
             <p><strong>Mensaje:</strong> {order.message or ''}</p>
             <h3>Total: ${total}</h3>
         </div>
         """
-
         resend.Emails.send({
             "from": from_email,
             "to": ["icarpiodeveloper@gmail.com"],
@@ -118,7 +114,6 @@ Total: ${total}
 
         html_client = f"""
         <div style="font-family: Arial; text-align: center;">
-
             <h1>
                 Napoli Pizza
             </h1>
@@ -126,7 +121,6 @@ Total: ${total}
             <img src="{pizza_img}" width="100" />
 
             <h2>Tu pedido ha sido recibido 🍕</h2>
-
             <p>Hola <strong>{order.customer_name}</strong></p>
 
             {items_html}
