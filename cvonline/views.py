@@ -7,16 +7,6 @@ from email.mime.image import MIMEImage
 import os
 from .serializers import ContactSerializer
 from django.views.decorators.csrf import csrf_exempt
-from threading import Thread
-
-
-def send_email(msg):
-    try:
-        print("🚀 Enviando email en thread...")
-        msg.send()
-        print("✅ EMAIL ENVIADO")
-    except Exception as e:
-        print("❌ ERROR SMTP:", str(e))
 
 
 @api_view(['POST'])
@@ -28,13 +18,9 @@ def contact_api(request):
     print("📦 Datos:", request.data)
 
     serializer = ContactSerializer(data=request.data)
-
     if not serializer.is_valid():
         print("❌ Errores del serializer:", serializer.errors)
-        return Response(
-            {'success': False, 'errors': serializer.errors},
-            status=status.HTTP_400_BAD_REQUEST
-        )
+        return Response({'success': False, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     data = serializer.validated_data
 
@@ -44,11 +30,8 @@ def contact_api(request):
         to_email = [from_email]
         reply_to = [data.get('email', '')]
 
-        text_content = (
-            f"Mensaje de {data.get('first_name', '')} {data.get('last_name', '')} "
-            f"({data.get('email', '')}):\n\n{data.get('message', '')}"
-        )
-
+        text_content = f"Mensaje de {data.get('first_name', '')} {data.get('last_name', '')} ({data.get('email', '')}):\n\n{data.get('message', '')}"
+        
         html_content = f"""
         <div style="text-align: center;">
             <img src="cid:image1" alt="Imagen" style="display: inline-block; width: 32px; height: 32px;">
@@ -57,38 +40,25 @@ def contact_api(request):
         <p>{data.get('message', '').replace('\n', '<br>')}</p>
         """
 
-        msg = EmailMultiAlternatives(
-            subject,
-            text_content,
-            from_email,
-            to_email,
-            reply_to=reply_to
-        )
-
+        msg = EmailMultiAlternatives(subject, text_content, from_email, to_email, reply_to=reply_to)
         msg.attach_alternative(html_content, "text/html")
 
-        # 📂 Imagen embebida
+        # ✅ Cargar imagen local al mismo nivel que views.py
         image_path = os.path.join(os.path.dirname(__file__), 'logo.png')
         print("📂 Cargando imagen desde:", image_path)
 
-        if os.path.exists(image_path):
-            with open(image_path, 'rb') as f:
-                image_data = f.read()
+        with open(image_path, 'rb') as f:
+            image_data = f.read()
 
-            image = MIMEImage(image_data, _subtype='png')
-            image.add_header('Content-ID', '<image1>')
-            msg.attach(image)
-        else:
-            print("⚠️ Imagen no encontrada, enviando email sin logo")
+        image = MIMEImage(image_data, _subtype='png')
+        image.add_header('Content-ID', '<image1>')
+        msg.attach(image)
 
-        # 🚀 ENVÍO ASÍNCRONO (CLAVE PARA RENDER)
-        Thread(target=send_email, args=(msg,)).start()
-
+        msg.send()
+        print("✅ Correo enviado con imagen embebida")
         return Response({'success': True}, status=status.HTTP_200_OK)
 
     except Exception as e:
-        print("❌ Error general:", str(e))
-        return Response(
-            {'success': False, 'errors': {'email': ['Error enviando email']}},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR
-        )
+        print("❌ Error enviando el correo:", str(e))
+        return Response({'success': False, 'errors': {'email': ['Error enviando email']}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
