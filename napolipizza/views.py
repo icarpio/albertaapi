@@ -138,7 +138,7 @@ Total: ${total}
 
         resend.Emails.send({
             "from": "Napoli Pizza <onboarding@resend.dev>",
-            "to": [order.customer_email],
+            "to": ["icarpiodeveloper@gmail.com"],
             "subject": subject_client,
             "text": text_client,
             "html": html_client,
