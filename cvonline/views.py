@@ -11,12 +11,12 @@ from threading import Thread
 
 
 def send_email(msg):
-    """Envía el email sin bloquear el request"""
     try:
+        print("🚀 Enviando email en thread...")
         msg.send()
-        print("✅ Correo enviado correctamente")
+        print("✅ EMAIL ENVIADO")
     except Exception as e:
-        print("❌ Error enviando email:", str(e))
+        print("❌ ERROR SMTP:", str(e))
 
 
 @api_view(['POST'])
