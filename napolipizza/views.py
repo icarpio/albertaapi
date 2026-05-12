@@ -1,12 +1,10 @@
-from .serializers import OrderSerializer
-from .models import Pizza
-from .serializers import PizzaSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
-from .serializers import OrderSerializer
+from .serializers import OrderSerializer, PizzaSerializer
+from .models import Pizza
 import os
 import resend
 
@@ -26,9 +24,8 @@ def order_api(request):
     order = serializer.save()
 
     try:
-        resend.api_key = os.environ.get("EMAIL_SEND")
+        resend.api_key = os.environ.get("RESEND_API_KEY")
 
-        from_email = "Napoli Pizza <onboarding@resend.dev>"
         total = order.total_price()
 
         # 🧾 ITEMS
@@ -37,9 +34,11 @@ def order_api(request):
 
         for item in order.items.all():
             subtotal = item.quantity * item.pizza.price
+
             items_text_list.append(
                 f"{item.quantity} x {item.pizza.name} - ${item.pizza.price} c/u - Subtotal: ${subtotal}"
             )
+
             items_html_list.append(
                 f"<p>{item.quantity} x {item.pizza.name} - ${item.pizza.price} c/u - Subtotal: ${subtotal}</p>"
             )
@@ -47,8 +46,8 @@ def order_api(request):
         items_text = "\n".join(items_text_list)
         items_html = "".join(items_html_list)
 
-        # 🖼️ IMAGEN (URL pública, NO archivo local)
-        pizza_img = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/500px-Coca-Cola_logo.svg.png"
+        # 🖼️ IMAGEN (URL pública obligatoria)
+        pizza_img = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Pizza_Margherita_stu_spivack.jpg/640px-Pizza_Margherita_stu_spivack.jpg"
 
         # =========================
         # 📩 EMAIL RESTAURANTE
@@ -74,18 +73,24 @@ Total: ${total}
         html_restaurant = f"""
         <div style="font-family: Arial;">
             <h2>🍕 Nuevo Pedido de Pizza</h2>
+
             <img src="{pizza_img}" width="120" />
+
             <p><strong>Cliente:</strong> {order.customer_name}</p>
             <p><strong>Email:</strong> {order.customer_email}</p>
             <p><strong>Teléfono:</strong> {order.customer_phone}</p>
+
             <h3>Pizzas:</h3>
             {items_html}
+
             <p><strong>Mensaje:</strong> {order.message or ''}</p>
+
             <h3>Total: ${total}</h3>
         </div>
         """
+
         resend.Emails.send({
-            "from": from_email,
+            "from": "Napoli Pizza <onboarding@resend.dev>",
             "to": ["icarpiodeveloper@gmail.com"],
             "subject": subject_restaurant,
             "text": text_restaurant,
@@ -114,13 +119,13 @@ Total: ${total}
 
         html_client = f"""
         <div style="font-family: Arial; text-align: center;">
-            <h1>
-                Napoli Pizza
-            </h1>
+
+            <h1>🍕 Napoli Pizza</h1>
 
             <img src="{pizza_img}" width="100" />
 
-            <h2>Tu pedido ha sido recibido 🍕</h2>
+            <h2>Tu pedido ha sido recibido</h2>
+
             <p>Hola <strong>{order.customer_name}</strong></p>
 
             {items_html}
@@ -132,7 +137,7 @@ Total: ${total}
         """
 
         resend.Emails.send({
-            "from": from_email,
+            "from": "Napoli Pizza <onboarding@resend.dev>",
             "to": [order.customer_email],
             "subject": subject_client,
             "text": text_client,
@@ -144,9 +149,10 @@ Total: ${total}
     except Exception as e:
         print("ERROR EMAIL:", e)
         return Response(
-            {'success': False, 'errors': {'email': ['Error enviando email']}},
+            {'success': False, 'errors': {'email': [str(e)]}},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -156,4 +162,7 @@ def menu_api(request):
         serializer = PizzaSerializer(pizzas, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception as e:
-        return Response({'success': False, 'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(
+            {'success': False, 'error': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
