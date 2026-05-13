@@ -53,7 +53,7 @@ def order_api(request):
         # 📩 EMAIL RESTAURANTE
         # =========================
 
-        subject_restaurant = f"Nuevo pedido de {order.customer_name}"
+        subject_restaurant = f"[RESTAURANTE] Nuevo pedido de {order.customer_name}"
 
         text_restaurant = f"""
 Nuevo pedido recibido:
@@ -102,7 +102,7 @@ Total: ${total}
         # 📩 EMAIL CLIENTE
         # =========================
 
-        subject_client = f"Confirmación de tu pedido, {order.customer_name}"
+        subject_client = f"[CLIENTE] Confirmación de pedido, {order.customer_name}"
 
         text_client = f"""
 Hola {order.customer_name},
@@ -138,7 +138,7 @@ Total: ${total}
 
         resend.Emails.send({
             "from": "Napoli Pizza <onboarding@resend.dev>",
-            "to": ["icarpiodeveloper@gmail.com"],
+            "to": [os.getenv("EMAIL_USER")],
             "subject": subject_client,
             "text": text_client,
             "html": html_client,
