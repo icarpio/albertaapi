@@ -91,7 +91,7 @@ Total: ${total}
 
         resend.Emails.send({
             "from": "Napoli Pizza <onboarding@resend.dev>",
-            "to": ["icarpiodeveloper@gmail.com"],
+            "to": [os.getenv("EMAIL_USER")],
             "subject": subject_restaurant,
             "text": text_restaurant,
             "html": html_restaurant,
